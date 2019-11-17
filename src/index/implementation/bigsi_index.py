@@ -9,7 +9,7 @@ class BigsiIndex(Index):
 
     def get_species_for_the_given_sequence (self, sequence: str) -> List[str]:
         species_of_perfect_hits_for_the_given_sequence = []
-        sequence_to_results_dict = self.__search(sequence, 1)
+        sequence_to_results_dict = self._search(sequence, 1)
         dataset_to_percent_kmers_found_and_species = sequence_to_results_dict[sequence]["results"]
 
         for percent_kmers_found_and_species in dataset_to_percent_kmers_found_and_species.values():
@@ -22,10 +22,11 @@ class BigsiIndex(Index):
         return species_of_perfect_hits_for_the_given_sequence
 
 
-    def __search(self, seq, threshold=1):
+    def _search(self, seq, threshold=1):
         request_url = f"{self._API_URL}/search?threshold={threshold}&seq={seq}"
         logging.info(f"Issuing BIGSI request: {request_url} ...")
-        results = requests.get(request_url).json()
+        response = requests.get(request_url)
+        results = response.json()
         logging.info("Request done!")
         return results
 
