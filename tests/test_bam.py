@@ -7,6 +7,8 @@ from unittest.mock import Mock
 # A naming pattern for unit test classes can be:
 # Test_<Class_Being_Tested>_<Method_Being_Tested>
 class Test_Bam_get_all_records(unittest.TestCase):
+    # TODO : This is an example of unit testing without mocking
+
     # Base case
     def test_bam_with_no_records___returns_no_records(self):
         bam = Bam(Path("test_data/zero_reads.bam"))
@@ -22,9 +24,9 @@ class Test_Bam_get_all_records(unittest.TestCase):
 
         actual = bam.get_all_records()
 
-        sam_header = AlignmentHeader.from_text("@SQ	SN:chr1_subsampled	LN:2755\n"
-                                               "@PG	ID:dummy	PN:dummy	VN:dummy	CL:dummy")
-        expected = [BamRecord(AlignedSegment.fromstring("chr1_subsampled_simulated_read_0	0	chr1_subsampled	1	60	100M	*	0	0	ACAAAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTG	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0", sam_header))]
+        expected = [
+            Test_Bam_get_all_records.create_bam_record("chr1_subsampled_simulated_read_0	0	chr1_subsampled	1	60	100M	*	0	0	ACAAAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTG	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0")
+        ]
         self.assertListEqual(actual, expected)
 
     # "induction step"
@@ -33,16 +35,25 @@ class Test_Bam_get_all_records(unittest.TestCase):
 
         actual = bam.get_all_records()
 
-        sam_header = AlignmentHeader.from_text("@SQ	SN:chr1_subsampled	LN:2755\n"
-                                               "@PG	ID:dummy	PN:dummy	VN:dummy	CL:dummy")
+
         expected = [
-            BamRecord(AlignedSegment.fromstring("chr1_subsampled_simulated_read_0	0	chr1_subsampled	1	60	100M	*	0	0	ACAAAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTG	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0", sam_header)),
-            BamRecord(AlignedSegment.fromstring("chr1_subsampled_simulated_read_1	0	chr1_subsampled	2	60	100M	*	0	0	CAAAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTGA	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0", sam_header)),
-            BamRecord(AlignedSegment.fromstring("chr1_subsampled_simulated_read_2	0	chr1_subsampled	3	60	100M	*	0	0	AAAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTGAG	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0", sam_header)),
-            BamRecord(AlignedSegment.fromstring("chr1_subsampled_simulated_read_3	0	chr1_subsampled	4	60	100M	*	0	0	AAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTGAGC	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0", sam_header))
+            Test_Bam_get_all_records.create_bam_record("chr1_subsampled_simulated_read_0	0	chr1_subsampled	1	60	100M	*	0	0	ACAAAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTG	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0"),
+            Test_Bam_get_all_records.create_bam_record("chr1_subsampled_simulated_read_1	0	chr1_subsampled	2	60	100M	*	0	0	CAAAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTGA	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0"),
+            Test_Bam_get_all_records.create_bam_record("chr1_subsampled_simulated_read_2	0	chr1_subsampled	3	60	100M	*	0	0	AAAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTGAG	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0"),
+            Test_Bam_get_all_records.create_bam_record("chr1_subsampled_simulated_read_3	0	chr1_subsampled	4	60	100M	*	0	0	AAAAAAACAAAACTTGAGGCCTGGCCTTCTGCTCCTCTCCAACCTCCCCTTCTCTGGGCCCAAGCCACCTTGGCTGAGGAGGGGGCGAGGAGGTGTGAGC	*	NM:i:0	MD:Z:100	AS:i:100	XS:i:0")
         ]
 
         self.assertListEqual(actual, expected)
+
+    # No need to see this implementation
+    @staticmethod
+    def create_bam_record(sam_line):
+        sam_header = AlignmentHeader.from_text("@SQ	SN:chr1_subsampled	LN:2755\n"
+                                               "@PG	ID:dummy	PN:dummy	VN:dummy	CL:dummy")
+        bam_record =  BamRecord(AlignedSegment.fromstring(sam_line, sam_header))
+        return bam_record
+
+
 
 
 
@@ -50,7 +61,8 @@ class Test_Bam_get_all_records(unittest.TestCase):
 class Test_Bam_get_all_unmapped_records(unittest.TestCase):
     '''
     We could do the same thing (create BAM with zero unmapped records, one and four, etc).
-    But now let's try a different approach (mocking + patching)
+    But now let's try a different approach with mocking.
+    TODO : show slides on unit testing vs integration testing
     '''
     def setUp(self):
         '''
@@ -145,3 +157,5 @@ class Test_Bam_get_all_unmapped_records(unittest.TestCase):
 
 
 # TODO : exercise: test Bam.there_are_no_unmapped_reads() by mocking Bam.get_all_unmapped_records()
+
+# TODO : next session: show a small bug with this test, and how we can solve it

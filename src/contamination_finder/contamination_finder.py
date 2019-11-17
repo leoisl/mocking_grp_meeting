@@ -4,7 +4,6 @@ from collections import Counter
 from typing import Optional
 from src.contamination_finder.contamination_explanation import Contamination_Explanation, Species_Explanation_Tuple
 
-# TODO : do not show implementation in the overview
 class Contamination_Finder:
     def __init__(self, bam: Bam, index: Index, original_species: str):
         self._bam = bam
@@ -12,7 +11,6 @@ class Contamination_Finder:
         self._original_species = original_species
 
 
-    # TODO: test with mocks
     def get_species_most_found_in_unmapped_reads(self) -> Optional[str]:
         species_to_frequency = Counter() # e.g. "E. coli": 100, "H. sapiens": 250, etc
 

@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 # Abstract classes: makes you explicitly tell what an Index needs to implement
 # Makes your code rely on abstract concepts and interfaces, instead of real implementation
 # Other parts of the code don't really care how Indexes are implemented, as long they respect this interface
+# Code is not biased towards one implementation
 
 class Index(ABC):
     @abstractmethod

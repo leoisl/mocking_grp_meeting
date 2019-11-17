@@ -5,16 +5,17 @@ from typing import List
 
 class Bam:
     def __init__(self, bam_filepath: Path):
-        self._bam_filepath = bam_filepath
+        self._bam_filepath = bam_filepath # e.g. "big_bang_test/bams/hg38_chr1_subsampled_all_reads.fa.bam"
 
     def get_all_records(self) -> List[BamRecord]:
-        bam_file = AlignmentFile(self._bam_filepath, "rb")
+        bam_file = AlignmentFile(self._bam_filepath, "rb") # open BAM file
 
         all_records = []
         for record in bam_file:
-            all_records.append(BamRecord(record))
+            bam_record = BamRecord(record)
+            all_records.append(bam_record)
 
-        bam_file.close()
+        bam_file.close() # close BAM file
         return all_records
 
     def get_all_unmapped_records(self) -> List[BamRecord]:
