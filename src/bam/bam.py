@@ -1,23 +1,31 @@
 from src.bam.bam_record import BamRecord
 from pysam import AlignmentFile
 from pathlib import Path
-from typing import Generator
+from typing import List
 
-# TODO: Talk about wrappers/adaptor classes
 class Bam:
     def __init__(self, bam_filepath: Path):
         self._bam_filepath = bam_filepath
 
-    def get_all_reads(self) -> Generator[BamRecord, None, None]:
+    def get_all_records(self) -> List[BamRecord]:
         bam_file = AlignmentFile(self._bam_filepath, "rb")
-        for record in bam_file:
-            yield BamRecord(record)
-        bam_file.close()
 
-    def get_all_unmapped_reads(self) -> Generator[BamRecord, None, None]:
-        for record in self.get_all_reads():
+        all_records = []
+        for record in bam_file:
+            all_records.append(BamRecord(record))
+
+        bam_file.close()
+        return all_records
+
+    def get_all_unmapped_records(self) -> List[BamRecord]:
+        all_records = self.get_all_records()
+
+        unmapped_records = []
+        for record in all_records:
             if record.is_unmapped():
-                yield record
+                unmapped_records.append(record)
+
+        return unmapped_records
 
     def there_are_no_unmapped_reads(self) -> bool:
-        return len(list(self.get_all_unmapped_reads())) == 0
+        return len(self.get_all_unmapped_records()) == 0

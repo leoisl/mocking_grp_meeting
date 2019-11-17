@@ -7,7 +7,7 @@ class BigsiIndex(Index):
     def __init__(self, API_URL: str):
         self._API_URL = API_URL
 
-    def get_species_of_perfect_hits_for_the_given_sequence (self, sequence: str) -> List[str]:
+    def get_species_for_the_given_sequence (self, sequence: str) -> List[str]:
         species_of_perfect_hits_for_the_given_sequence = []
         sequence_to_results_dict = self.__search(sequence, 1)
         dataset_to_percent_kmers_found_and_species = sequence_to_results_dict[sequence]["results"]

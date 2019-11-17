@@ -1,7 +1,6 @@
 from enum import Enum
 from collections import namedtuple
 
-
 class Contamination_Explanation(Enum):
     NO_CONTAMINATION_ALL_READS_WERE_MAPPED = "No contamination in the dataset, " \
                                              "all your reads were mapped to the reference."
